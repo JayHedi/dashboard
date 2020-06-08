@@ -27,20 +27,18 @@
                                             <li class="nav-item">
                                                 <a class="nav-link" href="{{ route('prixH') }}">Prix de l'heure</a>
                                             </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="{{ route('rentab') }}">Rentabilité</a>
-                                            </li>
+
                                         </ul>
                                     </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('rentab') }}">Rentabilité</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('quality') }}">Qualité</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('rh') }}">Ressources humaines</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('formation') }}">Formations</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('remun') }}">Rémunération</a>

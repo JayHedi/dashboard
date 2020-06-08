@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('mainlayout');
+    return view('home');
 });
 Route::get('dashboard/charge', [
     'as'=>'charge',
@@ -51,3 +51,7 @@ Route::get('/dashboard/marque_emplr',[
     'uses'=>'viewController@viewBranding'
 ]);
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

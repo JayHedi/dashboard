@@ -68,7 +68,7 @@ class Dispatcher implements DispatcherContract
      * Register an event listener with the dispatcher.
      *
      * @param  string|array  $events
-     * @param  mixed  $listener
+     * @param  \Closure|string  $listener
      * @return void
      */
     public function listen($events, $listener)
@@ -86,7 +86,7 @@ class Dispatcher implements DispatcherContract
      * Setup a wildcard listener callback.
      *
      * @param  string  $event
-     * @param  mixed  $listener
+     * @param  \Closure|string  $listener
      * @return void
      */
     protected function setupWildcardListen($event, $listener)
@@ -104,7 +104,26 @@ class Dispatcher implements DispatcherContract
      */
     public function hasListeners($eventName)
     {
-        return isset($this->listeners[$eventName]) || isset($this->wildcards[$eventName]);
+        return isset($this->listeners[$eventName]) ||
+               isset($this->wildcards[$eventName]) ||
+               $this->hasWildcardListeners($eventName);
+    }
+
+    /**
+     * Determine if the given event has any wildcard listeners.
+     *
+     * @param  string  $eventName
+     * @return bool
+     */
+    public function hasWildcardListeners($eventName)
+    {
+        foreach ($this->wildcards as $key => $listeners) {
+            if (Str::is($key, $eventName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -505,7 +524,8 @@ class Dispatcher implements DispatcherContract
     {
         return tap($job, function ($job) use ($listener) {
             $job->tries = $listener->tries ?? null;
-            $job->retryAfter = $listener->retryAfter ?? null;
+            $job->retryAfter = method_exists($listener, 'retryAfter')
+                                ? $listener->retryAfter() : ($listener->retryAfter ?? null);
             $job->timeout = $listener->timeout ?? null;
             $job->timeoutAt = method_exists($listener, 'retryUntil')
                                 ? $listener->retryUntil() : null;
